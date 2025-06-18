@@ -3,9 +3,7 @@ import { Icon } from 'astro-icon/components';
 import { quizQuestions } from '~/data/quiz-questions';
 
 // Select 5 random questions for the quiz
-const selectedQuestions = quizQuestions
-  .sort(() => Math.random() - 0.5)
-  .slice(0, 5);
+const selectedQuestions = quizQuestions.sort(() => Math.random() - 0.5).slice(0, 5);
 
 const totalQuestions = selectedQuestions.length;
 ---
@@ -34,7 +32,7 @@ const totalQuestions = selectedQuestions.length;
     score: 0,
     answers: [],
     isComplete: false,
-    showFeedback: false
+    showFeedback: false,
   };
 
   const scoreDisplayEl = document.getElementById('scoreDisplay');
@@ -47,14 +45,14 @@ const totalQuestions = selectedQuestions.length;
       score: 0,
       answers: [],
       isComplete: false,
-      showFeedback: false
+      showFeedback: false,
     };
-    
+
     // Hide results and show quiz content
     if (quizResultsEl) {
       quizResultsEl.classList.add('hidden');
     }
-    
+
     renderQuiz();
   }
 
@@ -68,7 +66,7 @@ const totalQuestions = selectedQuestions.length;
 
   function renderQuestion() {
     const currentQ = selectedQuestions[quizState.currentQuestion - 1];
-    
+
     if (scoreDisplayEl && questionCardEl) {
       scoreDisplayEl.innerHTML = `
         <div class="mb-8">
@@ -92,35 +90,46 @@ const totalQuestions = selectedQuestions.length;
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
           <div class="mb-6">
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">${currentQ.question}</h2>
-            ${quizState.showFeedback ? `
+            ${
+              quizState.showFeedback
+                ? `
               <div class="text-center py-3 px-4 rounded-lg mb-4 font-semibold text-lg ${quizState.answers[quizState.currentQuestion - 1] === currentQ.correctAnswer ? 'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900' : 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900'}">
                 ${quizState.answers[quizState.currentQuestion - 1] === currentQ.correctAnswer ? 'Correct!' : 'Incorrect!'}
               </div>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
           <div class="space-y-3">
-            ${currentQ.options.map((option, index) => {
-              const isSelected = quizState.answers[quizState.currentQuestion - 1] === index;
-              const isCorrect = index === currentQ.correctAnswer;
-              let buttonClass = "w-full p-4 text-left rounded-lg border-2 transition-all duration-200 font-medium";
-              
-              if (quizState.showFeedback) {
-                if (isSelected && isCorrect) {
-                  buttonClass += " bg-green-100 border-green-500 text-green-800 dark:bg-green-900 dark:border-green-400 dark:text-green-200";
-                } else if (isSelected && !isCorrect) {
-                  buttonClass += " bg-red-100 border-red-500 text-red-800 dark:bg-red-900 dark:border-red-400 dark:text-red-200";
-                } else if (isCorrect) {
-                  buttonClass += " bg-green-100 border-green-500 text-green-800 dark:bg-green-900 dark:border-green-400 dark:text-green-200";
+            ${currentQ.options
+              .map((option, index) => {
+                const isSelected = quizState.answers[quizState.currentQuestion - 1] === index;
+                const isCorrect = index === currentQ.correctAnswer;
+                let buttonClass = 'w-full p-4 text-left rounded-lg border-2 transition-all duration-200 font-medium';
+
+                if (quizState.showFeedback) {
+                  if (isSelected && isCorrect) {
+                    buttonClass +=
+                      ' bg-green-100 border-green-500 text-green-800 dark:bg-green-900 dark:border-green-400 dark:text-green-200';
+                  } else if (isSelected && !isCorrect) {
+                    buttonClass +=
+                      ' bg-red-100 border-red-500 text-red-800 dark:bg-red-900 dark:border-red-400 dark:text-red-200';
+                  } else if (isCorrect) {
+                    buttonClass +=
+                      ' bg-green-100 border-green-500 text-green-800 dark:bg-green-900 dark:border-green-400 dark:text-green-200';
+                  } else {
+                    buttonClass +=
+                      ' bg-gray-100 border-gray-300 text-gray-600 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 opacity-60';
+                  }
+                } else if (isSelected) {
+                  buttonClass +=
+                    ' bg-primary-100 border-primary-500 text-primary-800 dark:bg-primary-900 dark:border-primary-400 dark:text-primary-200';
                 } else {
-                  buttonClass += " bg-gray-100 border-gray-300 text-gray-600 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 opacity-60";
+                  buttonClass +=
+                    ' bg-white border-gray-300 text-gray-900 hover:bg-blue-100 hover:border-blue-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700 dark:hover:border-blue-500';
                 }
-              } else if (isSelected) {
-                buttonClass += " bg-primary-100 border-primary-500 text-primary-800 dark:bg-primary-900 dark:border-primary-400 dark:text-primary-200";
-              } else {
-                buttonClass += " bg-white border-gray-300 text-gray-900 hover:bg-blue-100 hover:border-blue-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700 dark:hover:border-blue-500";
-              }
-              
-              return `
+
+                return `
                 <button type="button" class="${buttonClass}" ${quizState.showFeedback ? 'disabled' : ''} data-index="${index}">
                   <span class="flex items-center">
                     <span class="w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center text-sm font-bold">${String.fromCharCode(65 + index)}</span>
@@ -128,13 +137,14 @@ const totalQuestions = selectedQuestions.length;
                   </span>
                 </button>
               `;
-            }).join('')}
+              })
+              .join('')}
           </div>
         </div>
       `;
 
       const answerButtons = questionCardEl.querySelectorAll('[data-index]');
-      answerButtons.forEach(button => {
+      answerButtons.forEach((button) => {
         button.addEventListener('click', handleAnswerClick);
       });
     }
@@ -178,31 +188,31 @@ const totalQuestions = selectedQuestions.length;
     scoreDisplayEl.innerHTML = '';
     questionCardEl.innerHTML = '';
     quizResultsEl.classList.remove('hidden');
-    
+
     const percentage = Math.round((quizState.score / totalQuestions) * 100);
-    
-    let message = "";
-    let style = "";
-    let icon = "";
-    
+
+    let message = '';
+    let style = '';
+    let icon = '';
+
     if (percentage >= 80) {
       message = "Excellent! You're a trivia master!";
-      style = "text-green-600 dark:text-green-400";
-      icon = "🏆";
+      style = 'text-green-600 dark:text-green-400';
+      icon = '🏆';
     } else if (percentage >= 60) {
-      message = "Good job! You know your stuff!";
-      style = "text-blue-600 dark:text-blue-400";
-      icon = "⭐";
+      message = 'Good job! You know your stuff!';
+      style = 'text-blue-600 dark:text-blue-400';
+      icon = '⭐';
     } else if (percentage >= 40) {
-      message = "Not bad! Keep learning!";
-      style = "text-yellow-600 dark:text-yellow-400";
-      icon = "💡";
+      message = 'Not bad! Keep learning!';
+      style = 'text-yellow-600 dark:text-yellow-400';
+      icon = '💡';
     } else {
       message = "Keep practicing! You'll get better!";
-      style = "text-red-600 dark:text-red-400";
-      icon = "❤️";
+      style = 'text-red-600 dark:text-red-400';
+      icon = '❤️';
     }
-    
+
     quizResultsEl.innerHTML = `
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-md mx-auto text-center">
         <div class="mb-4 text-4xl">${icon}</div>
@@ -215,7 +225,7 @@ const totalQuestions = selectedQuestions.length;
         </button>
       </div>
     `;
-    
+
     const playAgainBtn = quizResultsEl.querySelector('#playAgainBtn');
     if (playAgainBtn) {
       playAgainBtn.addEventListener('click', initQuiz);

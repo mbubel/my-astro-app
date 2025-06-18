@@ -11,8 +11,12 @@ export interface Props {
 const { question, selectedAnswer, showFeedback } = Astro.props;
 
 const isCorrect = selectedAnswer === question.correctAnswer;
-const feedbackMessage = showFeedback ? (isCorrect ? "Correct!" : "Incorrect!") : "";
-const feedbackClass = showFeedback ? (isCorrect ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400") : "";
+const feedbackMessage = showFeedback ? (isCorrect ? 'Correct!' : 'Incorrect!') : '';
+const feedbackClass = showFeedback
+  ? isCorrect
+    ? 'text-green-600 dark:text-green-400'
+    : 'text-red-600 dark:text-red-400'
+  : '';
 ---
 
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
@@ -21,45 +25,60 @@ const feedbackClass = showFeedback ? (isCorrect ? "text-green-600 dark:text-gree
     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
       {question.question}
     </h2>
-    
+
     <!-- Feedback Message -->
-    {showFeedback && (
-      <div class={`text-center py-3 px-4 rounded-lg mb-4 font-semibold text-lg ${feedbackClass} bg-opacity-10 ${isCorrect ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}`}>
-        {feedbackMessage}
-      </div>
-    )}
+    {
+      showFeedback && (
+        <div
+          class={`text-center py-3 px-4 rounded-lg mb-4 font-semibold text-lg ${feedbackClass} bg-opacity-10 ${isCorrect ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}`}
+        >
+          {feedbackMessage}
+        </div>
+      )
+    }
   </div>
-  
+
   <!-- Answer Options -->
   <div class="space-y-3">
-    {question.options.map((option, index) => (
-      <AnswerButton
-        text={option}
-        index={index}
-        isSelected={selectedAnswer === index}
-        isCorrect={index === question.correctAnswer}
-        showFeedback={showFeedback}
-      />
-    ))}
+    {
+      question.options.map((option, index) => (
+        <AnswerButton
+          text={option}
+          index={index}
+          isSelected={selectedAnswer === index}
+          isCorrect={index === question.correctAnswer}
+          showFeedback={showFeedback}
+        />
+      ))
+    }
   </div>
-  
+
   <!-- Category and Difficulty -->
   <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
     <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
-      {question.category && (
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-          {question.category}
-        </span>
-      )}
-      {question.difficulty && (
-        <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-          question.difficulty === 'easy' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-          question.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
-          'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-        }`}>
-          {question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1)}
-        </span>
-      )}
+      {
+        question.category && (
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+            {question.category}
+          </span>
+        )
+      }
+      {
+        question.difficulty && (
+          <span
+            class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+              question.difficulty === 'easy'
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                : question.difficulty === 'medium'
+                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                  : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+            }`}
+          >
+            {question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1)}
+          </span>
+        )
+      }
     </div>
   </div>
-</div> 
+</div>
+
