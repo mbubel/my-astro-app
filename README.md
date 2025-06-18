@@ -33,3 +33,4 @@ This was my first time using Cursor’s AI-assisted workflow. It was a cool expe
 ```bash
 npm install
 npm run dev
+```
