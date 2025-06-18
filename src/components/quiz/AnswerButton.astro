@@ -1,0 +1,76 @@
+---
+export interface Props {
+  text: string;
+  index: number;
+  isSelected: boolean;
+  isCorrect: boolean;
+  showFeedback: boolean;
+}
+
+const { text, index, isSelected, isCorrect, showFeedback } = Astro.props;
+
+// Determine button state and styling
+let buttonClass = "w-full p-4 text-left rounded-lg border-2 transition-all duration-200 font-medium";
+let isDisabled = false;
+
+if (showFeedback) {
+  isDisabled = true;
+  if (isSelected && isCorrect) {
+    buttonClass += " bg-green-100 border-green-500 text-green-800 dark:bg-green-900 dark:border-green-400 dark:text-green-200";
+  } else if (isSelected && !isCorrect) {
+    buttonClass += " bg-red-100 border-red-500 text-red-800 dark:bg-red-900 dark:border-red-400 dark:text-red-200";
+  } else if (isCorrect) {
+    buttonClass += " bg-green-100 border-green-500 text-green-800 dark:bg-green-900 dark:border-green-400 dark:text-green-200";
+  } else {
+    buttonClass += " bg-gray-100 border-gray-300 text-gray-600 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 opacity-60";
+  }
+} else if (isSelected) {
+  buttonClass += " bg-primary-100 border-primary-500 text-primary-800 dark:bg-primary-900 dark:border-primary-400 dark:text-primary-200";
+} else {
+    buttonClass += " bg-white border-gray-300 text-gray-900 hover:bg-blue-100 hover:border-blue-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700 dark:hover:border-blue-500";
+
+}
+---
+
+<button
+  type="button"
+  class={buttonClass}
+  disabled={isDisabled}
+  data-index={index}
+  data-correct={isCorrect}
+  data-selected={isSelected}
+  data-show-feedback={showFeedback}
+>
+  <span class="flex items-center">
+    <span class="w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center text-sm font-bold">
+      {String.fromCharCode(65 + index)} <!-- A, B, C, D -->
+    </span>
+    {text}
+  </span>
+</button>
+
+<script>
+  // Client-side interactivity
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('[data-index]');
+    
+    buttons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const buttonElement = target.closest('button') as HTMLButtonElement;
+        
+        if (buttonElement && !buttonElement.disabled) {
+          const index = parseInt(buttonElement.dataset.index || '0');
+          
+          // Dispatch custom event for parent component to handle
+          const event = new CustomEvent('answerSelected', {
+            detail: { index },
+            bubbles: true
+          });
+          
+          buttonElement.dispatchEvent(event);
+        }
+      });
+    });
+  });
+</script> 

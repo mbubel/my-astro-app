@@ -1,0 +1,18 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import QuizGame from '~/components/quiz/QuizGame.astro';
+
+const metadata = {
+  title: 'AstroWind Trivia Quiz',
+  description: 'Test your knowledge with our interactive trivia quiz featuring questions on various topics including science, history, geography, and more!',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="relative overflow-hidden py-16 md:py-20 lg:py-28">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6">
+      <QuizGame />
+    </div>
+  </section>
+</Layout> 

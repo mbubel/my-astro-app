@@ -1,0 +1,52 @@
+---
+export interface Props {
+  currentQuestion: number;
+  totalQuestions: number;
+  score: number;
+}
+
+const { currentQuestion, totalQuestions, score } = Astro.props;
+
+const progressPercentage = (currentQuestion / totalQuestions) * 100;
+---
+
+<div class="mb-8">
+  <!-- Progress Bar -->
+  <div class="mb-4">
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        Question {currentQuestion} of {totalQuestions}
+      </span>
+      <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        Score: {score}/{totalQuestions}
+      </span>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+      <div 
+        class="bg-primary-600 h-2 rounded-full transition-all duration-300 ease-out"
+        style={`width: ${progressPercentage}%`}
+      ></div>
+    </div>
+  </div>
+  
+  <!-- Score Display -->
+  <div class="flex justify-center items-center space-x-4">
+    <div class="text-center">
+      <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
+        {score}
+      </div>
+      <div class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+        Correct
+      </div>
+    </div>
+    <div class="text-gray-400 dark:text-gray-600">/</div>
+    <div class="text-center">
+      <div class="text-2xl font-bold text-gray-700 dark:text-gray-300">
+        {totalQuestions}
+      </div>
+      <div class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+        Total
+      </div>
+    </div>
+  </div>
+</div> 
